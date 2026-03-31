@@ -1,8 +1,8 @@
 <?php
 
-$connexion = new PDO('mysql:host=mysql_db;dbname=Webapplicatie1', 'root', 'rootpassword');
+$connection = new PDO('mysql:host=mysql_db;dbname=Webapplicatie1', 'root', 'rootpassword');
 
-$sql = $connexion->prepare("SELECT * FROM `menukaart`");
+$sql = $connection->prepare("SELECT * FROM `menukaart`");
 
 $sql->execute();
 $result = $sql->fetchAll();
@@ -131,6 +131,8 @@ $result = $sql->fetchAll();
                 ?>
 
             </div>
+
+            \
 
 
             </div>

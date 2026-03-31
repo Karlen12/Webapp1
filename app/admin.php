@@ -147,7 +147,7 @@ $result = $sql->fetchAll();
                 <td><div class="actions"><button class="btn-edit">✏️</button><button class="btn-del">🗑️</button></div></td>
             </tr>
             <?php
-            }   
+            }
             }
             ?>
 
