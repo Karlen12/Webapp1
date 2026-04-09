@@ -29,8 +29,7 @@ $result = $sql->fetchAll();
 
 
 <!DOCTYPE html>
-<html lang="nl">
-<head>
+<html lang="nl"><head>
     <meta charset="UTF-8">
     <title>Admin – Gerechten</title>
     <style>
@@ -112,7 +111,7 @@ $result = $sql->fetchAll();
 
         .actions { display: flex; gap: 8px; }
 
-        .btn-edit, .btn-del {
+        .btn-edit , .btn-del {
             border: none;
             background: none;
             cursor: pointer;
@@ -124,6 +123,7 @@ $result = $sql->fetchAll();
         .btn-edit:hover { background: #eef2ff; }
         .btn-del:hover  { background: #fff5f5; }
     </style>
+
 </head>
 <body>
 
@@ -146,7 +146,7 @@ $result = $sql->fetchAll();
                 <th>Naam</th>
                 <th>Categorie</th>
                 <th>Prijs</th>
-                <th>Acties</th>
+                <a >Acties</a>
             </tr>
             </thead>
             <tbody>
@@ -160,7 +160,7 @@ $result = $sql->fetchAll();
                 <td><?php echo $menuitem ["titel"] ?></td>
                 <td><span class="badge badge-meat">Vlees</span></td>
                 <td><?php echo $menuitem ["prijs"]?></td>
-                <td><div class="actions"><button class="btn-edit">✏️</button><button class="btn-del">🗑️</button></div></td>
+                <td><div class="actions"><button class="btn-edit">✏️</button><a href="bewerken.php"></a><button class="btn-del">🗑️</button></div></td>
             </tr>
             <?php
             }
