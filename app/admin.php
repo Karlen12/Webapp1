@@ -1,4 +1,20 @@
 <?php
+session_start();
+
+// Controleer of gebruiker ingelogd is
+if (!isset($_SESSION['ingelogd']) || $_SESSION['ingelogd'] !== true) {
+    header('Location: inlog.php');
+    exit;
+}
+?>
+
+
+
+
+
+
+
+<?php
 
 $connexion = new PDO('mysql:host=mysql_db;dbname=Webapplicatie1', 'root', 'rootpassword');
 

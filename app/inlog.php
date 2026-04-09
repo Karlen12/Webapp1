@@ -1,4 +1,16 @@
+<?php
+session_start();
 
+if (isset($_POST['Login'])) {
+    if ($_POST['username'] == "admin" && $_POST['password'] == "Karlen") {
+        $_SESSION['ingelogd'] = true; // ← dit toevoegen!
+        header('Location: admin.php');
+        exit;
+    } else {
+        echo "Je bent niet ingelogd";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,20 +21,7 @@
     <link rel="stylesheet" href="inlog.css"/>
 </head>
 <body>
-<?php
-var_dump($_POST);
 
-if (isset($_POST['Login'])) {
-    if ($_POST['username'] == "admin" && $_POST['password'] == "Karlen") {
-        echo "Je bent ingelogd";
-    } else {
-        echo "Je bent niet ingelogd";
-    }
-
-}
-
-
-?>
 
 <div class="flag-stripes">
     <div></div><div></div><div></div>
