@@ -50,3 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+
+
+const searchInput = document.getElementById('menu-search');
+if (searchInput) {
+    searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        document.querySelectorAll('.menu-item').forEach(function (item) {
+            const name = item.dataset.name || '';
+            const desc = item.dataset.desc || '';
+            item.style.display = (name.includes(query) || desc.includes(query)) ? '' : 'none';
+        });
+    });
+}

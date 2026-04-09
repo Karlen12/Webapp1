@@ -135,7 +135,7 @@ $result = $sql->fetchAll();
 <div class="container">
     <div class="toolbar">
         <h2>Gerechten</h2>
-        <button class="btn-add">+ Nieuw gerecht</button>
+        <a href="add.php" class="btn-add">+ Nieuw gerecht</a>
     </div>
 
     <div class="table-wrapper">

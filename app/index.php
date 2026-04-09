@@ -2,12 +2,16 @@
 
 $connection = new PDO('mysql:host=mysql_db;dbname=Webapplicatie1', 'root', 'rootpassword');
 
-$sql = $connection->prepare("SELECT * FROM `menukaart`");
-
-$sql->execute();
-$result = $sql->fetchAll();
-
-
+if (isset($_GET['zoekenknop'])) {
+    $sql = $connection->prepare("SELECT * FROM `menukaart` WHERE omschrijving LIKE :filter OR titel LIKE :filter");
+    $sql->bindValue(':filter', '%' . $_GET['zoekveld'] . '%');
+    $sql->execute();
+    $result = $sql->fetchAll();
+} else {
+    $sql = $connection->prepare("SELECT * FROM `menukaart`");
+    $sql->execute();
+    $result = $sql->fetchAll();
+}
 
 ?>
 
@@ -111,30 +115,44 @@ $result = $sql->fetchAll();
                 <a href="#" class="btn btn--outline" aria-label="View full menu">Full Menu <span aria-hidden="true">→</span></a>
             </div>
 
-            <!-- Tab navigation -->
+            <!-- Zoekbalk -->
+            <form method="GET" action="#menu" style="margin-bottom: 2rem;">
+                <div style="display: flex; gap: 0.5rem; max-width: 460px;">
+                    <input
+                            type="search"
+                            name="zoekveld"
+                            placeholder="Zoek een gerecht…"
+                            aria-label="Zoek in het menu"
+                            autocomplete="off"
+                            value="<?php echo isset($_GET['zoekveld']) ? htmlspecialchars($_GET['zoekveld']) : ''; ?>"
+                            style="flex: 1; padding: 0.6rem 1rem; border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem; background: transparent;"
+                    />
+                    <button type="submit" name="zoekenknop" class="btn btn--dark">
+                        Zoeken <span aria-hidden="true">→</span>
+                    </button>
+                    <?php if (isset($_GET['zoekenknop'])): ?>
+                        <a href="#menu" class="btn btn--outline">Wissen</a>
+                    <?php endif; ?>
+                </div>
+            </form>
 
-            <!-- STARTERS -->
+            <!-- Geen resultaten melding -->
+            <?php if (isset($_GET['zoekenknop']) && empty($result)): ?>
+                ">
+                    Niks gevonden  "<?php echo ($_GET['zoekveld']); ?>".
+                </p>
+            <?php endif; ?>
+
+            <!-- GERECHTEN -->
             <div class="menu-panel active" id="panel-starters" role="tabpanel" aria-labelledby="tab-starters">
-                <?php
-                foreach ($result as $menuitem) {
-                    {
-                        ?>
-                        <article class="menu-item">
-                            <p class="menu-item__cat">dishes</p>
-                            <h3 class="menu-item__name"><?php echo $menuitem ["titel"] ?> </h3>
-                            <p class="menu-item__desc"> <?php echo $menuitem ["omschrijving"] ?></p>
-                            <p class="menu-item__price" aria-label="23 euros"><?php echo $menuitem ["prijs"] ?></p>
-                        </article>
-                        <?php
-                    }
-                }
-                ?>
-
-            </div>
-
-            \
-
-
+                <?php foreach ($result as $menuitem): ?>
+                    <article class="menu-item">
+                        <p class="menu-item__cat">dishes</p>
+                        <h3 class="menu-item__name"><?php echo ($menuitem['titel']); ?></h3>
+                        <p class="menu-item__desc"><?php echo ($menuitem['omschrijving']); ?></p>
+                        <p class="menu-item__price"><?php echo($menuitem['prijs']); ?></p>
+                    </article>
+                <?php endforeach; ?>
             </div>
 
         </div>
@@ -150,174 +168,4 @@ $result = $sql->fetchAll();
             <article class="experience-card">
                 <div class="experience-card__number" aria-hidden="true">01</div>
                 <h3 class="experience-card__title">Private Dining</h3>
-                <p class="experience-card__desc">An exclusive room for up to 20 guests. Perfect for celebrations, corporate dinners and intimate gatherings.</p>
-            </article>
-            <article class="experience-card">
-                <div class="experience-card__number" aria-hidden="true">02</div>
-                <h3 class="experience-card__title">Chef's Table</h3>
-                <p class="experience-card__desc">Six seats at the pass. Watch our team work and enjoy a seasonal tasting menu created that evening.</p>
-            </article>
-            <article class="experience-card">
-                <div class="experience-card__number" aria-hidden="true">03</div>
-                <h3 class="experience-card__title">Wine Pairing</h3>
-                <p class="experience-card__desc">A curated selection of Armenian and Caucasian wines, paired course by course by our sommelier.</p>
-            </article>
-        </div>
-    </section>
-
-    <!-- AMBIANCE -->
-    <section class="ambiance" id="ambiance" aria-labelledby="ambiance-heading">
-        <div class="section-inner">
-            <div class="ambiance__text">
-                <span class="section-label" aria-hidden="true">The Space</span>
-                <br><br>
-                <h2 id="ambiance-heading">Designed for<br>presence</h2>
-                <p>Warm materials, considered light, and the gentle rhythm of the kitchen. Our dining room is a retreat from the pace of the city.</p>
-            </div>
-            <div aria-hidden="true"></div>
-        </div>
-        <div class="gallery" role="img" aria-label="Ararat restaurant spaces">
-            <div class="gallery__tile"><span class="gallery__tile-label">The Dining Room</span></div>
-            <div class="gallery__tile"><span class="gallery__tile-label">The Bar</span></div>
-            <div class="gallery__tile"><span class="gallery__tile-label">The Garden</span></div>
-            <div class="gallery__tile"><span class="gallery__tile-label">Private Dining</span></div>
-            <div class="gallery__tile"><span class="gallery__tile-label">The Kitchen</span></div>
-        </div>
-    </section>
-
-    <!-- RESERVATION CTA -->
-    <section class="reservation-cta" aria-labelledby="cta-heading">
-        <span class="eyebrow">Join Us</span>
-        <h2 id="cta-heading">Reserve your<br><em>evening</em></h2>
-        <p>Lunch Tuesday–Friday &nbsp;·&nbsp; Dinner Tuesday–Sunday</p>
-        <a href="#contact" class="btn btn--dark">
-            Make a Reservation <span aria-hidden="true">→</span>
-        </a>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact" id="contact" aria-labelledby="contact-heading">
-        <div class="section-inner">
-            <div class="contact__info">
-                <h2 id="contact-heading">Get in<br><em>touch</em></h2>
-                <address style="font-style:normal;">
-                    <div class="contact-detail">
-                        <p class="contact-detail__label">Address</p>
-                        <p class="contact-detail__value">Keizersgracht 1<br>1015 CN Amsterdam<br>The Netherlands</p>
-                    </div>
-                    <div class="contact-detail">
-                        <p class="contact-detail__label">Phone</p>
-                        <p class="contact-detail__value"><a href="tel:+31200000000">+31 20 000 0000</a></p>
-                    </div>
-                    <div class="contact-detail">
-                        <p class="contact-detail__label">Email</p>
-                        <p class="contact-detail__value"><a href="mailto:hello@ararat-restaurant.nl">hello@ararat-restaurant.nl</a></p>
-                    </div>
-                    <div class="contact-detail">
-                        <p class="contact-detail__label">Opening Hours</p>
-                        <p class="contact-detail__value">
-                            Lunch: Tue – Fri, 12:00 – 15:00<br>
-                            Dinner: Tue – Sun, 18:00 – 23:00<br>
-                            Monday: Closed
-                        </p>
-                    </div>
-                </address>
-            </div>
-
-            <div class="contact__form">
-                <h3>Make a Reservation</h3>
-                <form action="#" method="post" novalidate>
-                    <div class="form-row">
-                        <div class="form-field">
-                            <label for="first-name">First name</label>
-                            <input type="text" id="first-name" name="first_name" autocomplete="given-name" placeholder="Marie" required />
-                        </div>
-                        <div class="form-field">
-                            <label for="last-name">Last name</label>
-                            <input type="text" id="last-name" name="last_name" autocomplete="family-name" placeholder="Dupont" required />
-                        </div>
-                    </div>
-                    <div class="form-field">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" autocomplete="email" placeholder="marie@example.com" required />
-                    </div>
-                    <div class="form-row">
-                        <div class="form-field">
-                            <label for="date">Date</label>
-                            <input type="date" id="date" name="date" required />
-                        </div>
-                        <div class="form-field">
-                            <label for="time">Time</label>
-                            <select id="time" name="time" required>
-                                <option value="" disabled selected>Select time</option>
-                                <optgroup label="Lunch">
-                                    <option>12:00</option><option>12:30</option>
-                                    <option>13:00</option><option>13:30</option>
-                                </optgroup>
-                                <optgroup label="Dinner">
-                                    <option>18:00</option><option>18:30</option>
-                                    <option>19:00</option><option>19:30</option>
-                                    <option>20:00</option><option>20:30</option>
-                                    <option>21:00</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-field">
-                        <label for="guests">Number of guests</label>
-                        <select id="guests" name="guests" required>
-                            <option value="" disabled selected>Select guests</option>
-                            <option>1</option><option>2</option><option>3</option>
-                            <option>4</option><option>5</option><option>6+</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="notes">Special requests</label>
-                        <textarea id="notes" name="notes" placeholder="Dietary requirements, celebrations, etc." rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn--dark" style="width:100%;justify-content:center;">
-                        Confirm Reservation <span aria-hidden="true">→</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<!-- ═══ FOOTER ═══ -->
-<footer class="site-footer" role="contentinfo">
-    <div class="site-footer__grid">
-        <div>
-            <span class="footer-brand">Ararat</span>
-            <p>Fine Armenian dining in the heart of Amsterdam. A table for every occasion.</p>
-        </div>
-        <nav aria-label="Footer — Explore">
-            <h4>Explore</h4>
-            <ul>
-                <li><a href="#philosophy">Our Story</a></li>
-                <li><a href="#menu">Menu</a></li>
-                <li><a href="#experiences">Experiences</a></li>
-                <li><a href="#ambiance">Ambiance</a></li>
-            </ul>
-        </nav>
-        <nav aria-label="Footer — Visit">
-            <h4>Visit</h4>
-            <p>Keizersgracht 1<br>1015 CN Amsterdam<br><a href="tel:+31200000000">+31 20 000 0000</a></p>
-        </nav>
-        <div>
-            <h4>Hours</h4>
-            <p>Lunch: Tue – Fri<br>12:00 – 15:00<br><br>Dinner: Tue – Sun<br>18:00 – 23:00</p>
-        </div>
-    </div>
-    <div class="site-footer__bottom">
-        <span>© 2025 Ararat Restaurant — All rights reserved</span>
-        <span>KVK 12345678 · BTW NL123456789B01</span>
-    </div>
-</footer>
-
-<!-- JavaScript -->
-<script src="main.js"></script>
-
-</body>
-</html>
+                <p class="experience-card__desc
